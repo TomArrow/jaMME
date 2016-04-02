@@ -16,6 +16,10 @@ static qboolean pipeOpen(mmePipeFile_t *pipeFile, const char *name, mmeShotType_
     int		outLeft = sizeof(outBuf) - 1;
     char*   mod = ri.Cvar_VariableString("fs_game");
     
+    if (!Q_stricmp(mod, "")) {
+        mod = "base";
+    }
+
     format = mme_pipeCommand->string;
     if (!format || !format[0]) {
         format = "ffmpeg -r %f -f rawvideo -pix_fmt rgb24 -s %wx%h -i - -threads 0 -preset fast -y -pix_fmt yuv444p -crf 17 -vf vflip %o.mp4 2> ffmpeglog.txt";
