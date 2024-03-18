@@ -61,12 +61,22 @@ void R_GammaCorrect( byte *buffer, int bufSize ) {
 		buffer[i] = s_gammatable[buffer[i]];
 	}
 */
+
+#if 1
+	int time1 = timeGetTime();
+#endif
+
 	for ( i = 0; i < bufSize/4; i++ ) {
 		buffer[i*4+0] = s_gammatable[buffer[i*4+0]];
 		buffer[i*4+1] = s_gammatable[buffer[i*4+1]];
 		buffer[i*4+2] = s_gammatable[buffer[i*4+2]];
 		buffer[i*4+3] = s_gammatable[buffer[i*4+3]];
 	}
+
+#if 1
+	Com_Printf("GammaCorrect: time taken %i ms\n", timeGetTime() - time1);
+#endif
+
 }
 
 typedef struct {

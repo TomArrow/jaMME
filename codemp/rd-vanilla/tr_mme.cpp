@@ -74,7 +74,7 @@ cvar_t  *mme_pipeCommand;
 
 cvar_t	*mme_forceTGA;//loda
 
-ID_INLINE byte * R_MME_BlurOverlapBuf( mmeBlurBlock_t *block ) {
+extern ID_INLINE byte * R_MME_BlurOverlapBuf( mmeBlurBlock_t *block ) {
 	mmeBlurControl_t* control = block->control;
 	int index = control->overlapIndex % control->overlapFrames;
 	return (byte *)( block->overlap + block->count * index );
@@ -267,6 +267,10 @@ qboolean R_MME_TakeShot( void ) {
 	qboolean doGamma;
 	mmeBlurControl_t* blurControl = &blurData.control;
 
+#if 1
+	int time1 = timeGetTime();
+#endif
+
 	if ( !shotData.take || allocFailed || tr.finishStereo )
 		return qfalse;
 	shotData.take = qfalse;
@@ -304,6 +308,11 @@ qboolean R_MME_TakeShot( void ) {
 		R_MME_SaveShot( &shotData.main, glConfig.vidWidth, glConfig.vidHeight, shotData.fps, shotBuf, qfalse, -1, inSound );
 		ri.Hunk_FreeTempMemory( shotBuf );
 		Com_sprintf( shotData.main.name, sizeof( shotData.main.name ), "%s", shotData.main.nameOld );
+
+#if 1
+		Com_Printf("Takeshot 1: time taken %i ms\n", timeGetTime() - time1);
+#endif
+
 		return qtrue;
 	}
 	/* Test if we need to do blurred shots */
@@ -476,6 +485,12 @@ qboolean R_MME_TakeShot( void ) {
 			ri.Hunk_FreeTempMemory( depthShot );
 		}
 	}
+
+#if 1
+	Com_Printf("Takeshot 2: time taken %i ms\n", timeGetTime() - time1);
+#endif
+
+
 	return qtrue;
 }
 

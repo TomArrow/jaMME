@@ -1869,6 +1869,11 @@ RB_SwapBuffers
 const void	*RB_SwapBuffers( const void *data ) {
 	const swapBuffersCommand_t	*cmd;
 
+#if 1
+	int time1 = timeGetTime();
+#endif
+
+
 	// finish any 2D drawing if needed
 	if ( tess.numIndexes ) {
 		RB_EndSurface();
@@ -1945,6 +1950,10 @@ const void	*RB_SwapBuffers( const void *data ) {
     GLimp_LogComment( "***************** RB_SwapBuffers *****************\n\n\n" );
 
     GLimp_EndFrame();
+
+#if 1
+	Com_Printf("SwapBuffers: time taken %i ms\n", timeGetTime() - time1);
+#endif
 
 	return (const void *)(cmd + 1);
 }

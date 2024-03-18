@@ -2,14 +2,15 @@
 
 extern GLuint pboIds[2];
 void R_MME_GetShot( void* output ) {
+	//int time1 = timeGetTime();//loda
 	if (!mme_pbo->integer || r_stereoSeparation->value != 0) {
 		qglReadPixels( 0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGB, GL_UNSIGNED_BYTE, output ); 
 	} else {
 		static int index = 0;
 		qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, pboIds[index]);
 		index = (index + 1) % 4;
-		qglReadPixels( 0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGB, GL_UNSIGNED_BYTE, 0 );
 
+		qglReadPixels( 0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGB, GL_UNSIGNED_BYTE, 0 );
 		// map the PBO to process its data by CPU
 		qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, pboIds[index]);
 		GLubyte* ptr = (GLubyte*)qglMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
@@ -20,6 +21,7 @@ void R_MME_GetShot( void* output ) {
 		// back to conventional pixel operation
 		qglBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
 	}
+	//Com_Printf("Frame took %i ms\n", timeGetTime() - time1);//loda
 }
 
 void R_MME_GetStencil( void *output ) {
@@ -97,7 +99,7 @@ void R_MME_SaveShot( mmeShot_t *shot, int width, int height, float fps, byte *in
 		if (audio)
 			mmeAviSound( &shot->avi, shot->name, shot->type, width, height, fps, aBuf, aSize );
 		mmeAviShot( &shot->avi, shot->name, shot->type, width, height, fps, inBuf, audio );
-            return;
+        return;
     case mmeShotFormatPIPE:
         mmePipeShot(&shot->pipe, shot->name, shot->type, width, height, fps, inBuf);
         return;

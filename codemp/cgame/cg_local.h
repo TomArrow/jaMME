@@ -87,6 +87,38 @@
 #define DEFAULT_REDTEAM_NAME		"Empire"
 #define DEFAULT_BLUETEAM_NAME		"Rebellion"
 
+//Cosmetics
+#define	JAPRO_COSMETIC_SANTAHAT	(1<<0)
+#define	JAPRO_COSMETIC_PUMKIN	(1<<1)
+#define	JAPRO_COSMETIC_CAP		(1<<2)
+#define	JAPRO_COSMETIC_FEDORA	(1<<3)
+#define	JAPRO_COSMETIC_CRINGE	(1<<4)
+#define	JAPRO_COSMETIC_SOMBRERO	(1<<5)
+#define	JAPRO_COSMETIC_TOPHAT	(1<<6)
+#define	JAPRO_COSMETIC_MASK	    (1<<7)
+#define	JAPRO_COSMETIC_GRADCAP   (1<<8)
+#define	JAPRO_COSMETIC_FEDORA1   (1<<9)
+#define	JAPRO_COSMETIC_FEDORA2   (1<<10)
+#define	JAPRO_COSMETIC_FEDORA3   (1<<11)
+#define	JAPRO_COSMETIC_FEDORA4   (1<<12)
+#define	JAPRO_COSMETIC_HEADCRAB  (1<<13)
+#define	JAPRO_COSMETIC_VADERCAPE  (1<<14)
+#define	JAPRO_COSMETIC_YODACAPE  (1<<15)
+#define	JAPRO_COSMETIC_HORNS	  (1<<16)
+#define	JAPRO_COSMETIC_METALHELM  (1<<17)
+#define	JAPRO_COSMETIC_AFRO		(1<<18)
+#define	JAPRO_COSMETIC_AK47		(1<<19)
+#define	JAPRO_COSMETIC_BUCKET	(1<<20)
+#define	JAPRO_COSMETIC_CROWBAR	(1<<21)
+#define	JAPRO_COSMETIC_CROWN	(1<<22)
+#define	JAPRO_COSMETIC_ROYALCAPE	(1<<23)
+#define	JAPRO_COSMETIC_BEARD	(1<<24)
+#define	JAPRO_COSMETIC_GROGUCAPE	(1<<25)
+#define	JAPRO_COSMETIC_PLAGUEMASK	(1<<26)
+#define	JAPRO_COSMETIC_GLASSES	(1<<27)
+#define	JAPRO_COSMETIC_MARIO		(1<<28)
+#define	JAPRO_COSMETIC_RPG		(1<<28)
+
 #define JK2AWARDS
 
 extern int fxT;
@@ -330,6 +362,8 @@ typedef struct {
 	vec3_t		rgb1;
 	vec3_t		rgb2;
 	//[/RGBSabers]
+	//japro cosmetics
+	unsigned int	cosmetics;
 
 } clientInfo_t;
 
@@ -1303,6 +1337,10 @@ typedef struct {
 	qhandle_t	blackBlurShader;
 	//[/RGBSabers]
 
+	//japro
+	qhandle_t	grappleModel;//grapple model
+	qhandle_t	grappleShader;
+
 	//[SFXSabers]
 	qhandle_t	sfxSaberBladeShader;
 	qhandle_t	sfxSaberBlade2Shader;
@@ -1567,6 +1605,40 @@ typedef struct {
 	// For vehicles only now
 	sfxHandle_t	noAmmoSound;
 
+	//japro cosmetics
+	struct {
+		qhandle_t	santaHat;
+		qhandle_t	pumpkin;
+		qhandle_t	cap;
+		qhandle_t	fedora;
+		qhandle_t	kringekap;
+		qhandle_t	sombrero;
+		qhandle_t	tophat;
+		qhandle_t	mask;
+		qhandle_t	gradcap;
+		qhandle_t	fedora1;
+		qhandle_t	fedora2;
+		qhandle_t	fedora3;
+		qhandle_t	fedora4;
+		qhandle_t	headcrab;
+		qhandle_t	vadercape;
+		qhandle_t	yodacape;
+		qhandle_t	horns;
+		qhandle_t	metalhelm;
+		qhandle_t	afro;
+		qhandle_t	ak47;
+		qhandle_t	bucket;
+		qhandle_t	crowbar;
+		qhandle_t	crown;
+		qhandle_t	royalcape;
+		qhandle_t	beard;
+		qhandle_t	grogucape;
+		qhandle_t	plaguemask;
+		qhandle_t	glasses;
+		qhandle_t	mario;
+		qhandle_t	rpg;
+	} cosmetics;
+
 	// Force looping sounds
 	sfxHandle_t speedLoopSound;
 	sfxHandle_t protectLoopSound;
@@ -1705,6 +1777,10 @@ typedef struct
 	fxHandle_t waterSplash;
 	fxHandle_t lavaSplash;
 	fxHandle_t acidSplash;
+
+//japro
+	fxHandle_t grappleHitWall;
+	fxHandle_t grappleHitPlayer;
 
 	//WEATHER
 	fxHandle_t	saberFizz;

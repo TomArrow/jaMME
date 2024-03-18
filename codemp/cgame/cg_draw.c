@@ -4610,6 +4610,13 @@ void CG_CenterPrint( const char *str, int y, int charWidth ) {
 	int		i = 0;
 	//[/BugFix19]
 
+	if (cg_centerHeight.value)
+		y = cg_centerHeight.value;
+	if (y < 0)
+		y = 0;
+	if (y > SCREEN_HEIGHT)
+		y = SCREEN_HEIGHT;
+
 	if( mov_fragsOnly.integer ) {
 		char sKilledStr[256];
 		trap_SP_GetStringTextString("MP_INGAME_KILLED_MESSAGE", sKilledStr, sizeof(sKilledStr));
@@ -4663,7 +4670,12 @@ static void CG_DrawCenterString( void ) {
 	int		x, y, w;
 	int h;
 	float	*color;
-	const float scale = 1.0; //0.5
+	float	scale = cg_centerSize.value;//1.0; //0.5
+
+	if (scale < 0)
+		scale = 0;
+	else if (!scale || scale > 1)
+		scale = 1;
 
 	if ( !cg.centerPrintTime ) {
 		return;

@@ -3114,8 +3114,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			}
 			else
 			{
-				alt = qfalse;
-				CG_MissileHitPlayer( es->weapon, position, dir, es->otherEntityNum, qfalse);
+				if (es->weapon == WP_BRYAR_PISTOL && es->saberInFlight) { //Its a grappling hook.
+					trap_FX_PlayEffectID(cgs.effects.grappleHitPlayer, position, dir, -1, -1, qfalse);
+					return;
+				}
+				CG_MissileHitPlayer(es->weapon, position, dir, es->otherEntityNum, qfalse);
 			}
 
 			if (cg_ghoul2Marks.integer &&
@@ -3148,7 +3151,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			}
 			else
 			{
-				alt = qfalse;
+				if (es->weapon == WP_BRYAR_PISTOL && es->saberInFlight) { //Its a grappling hook.
+					trap_FX_PlayEffectID(cgs.effects.grappleHitWall, position, dir, -1, -1, qfalse);
+					return;
+				}
+
 				CG_MissileHitWall(es->weapon, 0, position, dir, IMPACTSOUND_DEFAULT, qfalse, 0);
 			}
 
