@@ -3,6 +3,10 @@
 
 #include "tr_local.h"
 
+#if (!defined (HAVE_GLES) || defined (X86_OR_64)) && !defined (__arm64__)
+#include <mmintrin.h>
+#endif
+
 #define AVI_MAX_FRAMES	2000000
 #define AVI_MAX_SIZE	((2*1024-10)*1024*1024)
 #define AVI_HEADER_SIZE	2048

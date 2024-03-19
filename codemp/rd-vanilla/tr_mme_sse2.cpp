@@ -3,6 +3,9 @@
 #include "tr_local.h"
 #include "tr_mme.h"
 
+#if (!defined (HAVE_GLES) || defined (X86_OR_64)) && !defined (__arm64__)
+#include <emmintrin.h>
+
 void MME_AccumClearSSE( void *w, const void *r, short int mul, int count ) {
 	const __m128i * reader = (const __m128i *) r;
 	__m128i *writer = (__m128i *) w;
@@ -87,3 +90,5 @@ void MME_AccumShiftSSE( const void *r, void *w, int count ) {
 		writer += 2;
 	}
 }
+
+#endif
