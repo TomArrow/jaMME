@@ -1,5 +1,6 @@
 //Anything above this #include will be ignored by the compiler
 #include "../qcommon/exe_headers.h"
+#include "../qcommon/q_shared.h"
 
 vm_t *currentVM = NULL; // bk001212
 
@@ -152,7 +153,7 @@ vm_t *VM_CreateLegacy( vmSlots_t vmSlot, intptr_t (*systemCalls)(intptr_t *) ) {
 
 	// find the legacy syscall api
 	FS_FindPureDLL( vm->name );
-	Com_Printf( "VM_CreateLegacy: %s"ARCH_STRING DLL_EXT"\n", vm->name );
+	Com_Printf( "VM_CreateLegacy: %s" ARCH_STRING DLL_EXT"\n", vm->name );
 	vm->dllHandle = Sys_LoadLegacyGameDll( vm->name, &vm->legacy.main, VM_DllSyscall );
 
 	if ( vm->dllHandle ) {
