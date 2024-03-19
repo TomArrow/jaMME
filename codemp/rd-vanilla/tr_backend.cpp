@@ -1951,9 +1951,9 @@ const void	*RB_SwapBuffers( const void *data ) {
 
     GLimp_EndFrame();
 
-#if 1
-	Com_Printf("SwapBuffers: time taken %i ms\n", timeGetTime() - time1);
-#endif
+//#if 1
+//	Com_Printf("SwapBuffers: time taken %i ms\n", timeGetTime() - time1);
+//#endif
 
 	return (const void *)(cmd + 1);
 }
