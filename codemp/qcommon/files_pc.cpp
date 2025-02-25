@@ -3738,6 +3738,27 @@ bool FS_LoadMachOBundle( const char *name )
 }
 #endif
 
+static char* FS_BuildOSPathPipeWin32(const char* base, const char* game, const char* qpath) { // put quotes around everything so _popen doesnt spazz out
+	char	temp[MAX_OSPATH*2];
+	static char ospath[4][MAX_OSPATH * 2]; // *2 cause pipe commands are long..
+	static int toggle;
+
+	//pre-fs_cf2
+	//toggle ^= 1;		// flip-flop to allow two returns without clash
+	//post-fs_cf2
+	toggle = (++toggle) & 3;	// allows four returns without clash (increased from 2 during fs_copyfiles 2 enhancement)
+
+	if (!game || !game[0]) {
+		game = fs_gamedir;
+	}
+
+	Com_sprintf(temp, sizeof(temp), "/%s/\"%s", game, qpath); // first quote here at the end of the path
+	FS_ReplaceSeparators(temp);
+	Com_sprintf(ospath[toggle], sizeof(ospath[0]), "\"\"%s%s\"", base, temp); // then two quotes at the start and one more at the end. that way: path is quoted, and the entire expression is quoted. i hate windows.
+
+	return ospath[toggle];
+}
+
 //pipes!!
 fileHandle_t FS_PipeOpen(const char *qcmd, const char *qpath, const char *mode) {
     char			*ospath;
@@ -3760,7 +3781,11 @@ fileHandle_t FS_PipeOpen(const char *qcmd, const char *qpath, const char *mode) 
     if(FS_CreatePath(ospath)) {
         return 0;
     }
-    cmd = FS_BuildOSPath(fs_homepath->string, fs_gamedir, qcmd);
+#ifdef _WIN32
+    cmd = FS_BuildOSPathPipeWin32(fs_homepath->string, fs_gamedir, qcmd);
+#else 
+	cmd = FS_BuildOSPath(fs_homepath->string, fs_gamedir, qcmd);
+#endif
     
 #ifdef _WIN32
     fsh[f].handleFiles.file.o = _popen(cmd, mode);

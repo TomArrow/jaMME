@@ -542,7 +542,7 @@ public:
 		if (!mWeatherZones.size())
 		{
 			Com_Printf("WARNING: No Weather Zones Encountered\n");
-			AddWeatherZone(tr.world->bmodels[0].bounds[0], tr.world->bmodels[0].bounds[1]);
+			//AddWeatherZone(tr.world->bmodels[0].bounds[0], tr.world->bmodels[0].bounds[1]);
 		}
 
 		// Iterate Over All Weather Zones
