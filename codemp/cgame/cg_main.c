@@ -3008,6 +3008,8 @@ void CG_PmoveClientPointerUpdate();
 void WP_SaberLoadParms( void );
 void BG_VehicleLoadParms( void );
 
+void demoSeekPreRecord(const char* preRecordTimeString);
+
 /*
 =================
 CG_Init
@@ -3261,6 +3263,7 @@ Ghoul2 Insert End
 	trap_Cvar_VariableStringBuffer( "rate", buf, sizeof( buf ) );
 	if ( atoi( buf ) == 4000 )
 		CG_Printf( "^3WARNING: Default /rate value detected. Suggest typing /rate 25000 for a smoother connection!\n" );
+
 }
 
 //makes sure returned string is in localized format

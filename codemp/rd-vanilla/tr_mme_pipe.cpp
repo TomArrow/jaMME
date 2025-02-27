@@ -11,13 +11,18 @@ void pipeClose( mmePipeFile_t *pipeFile ) {
 static qboolean pipeOpen(mmePipeFile_t *pipeFile, const char *name, mmeShotType_t type, int width, int height, float fps) {
     const	char *format;
     qboolean haveTag = qfalse;
-    char	outBuf[512];
+    char	outBuf[2048];
     int		outIndex = 0;
     int		outLeft = sizeof(outBuf) - 1;
+    char*   mod = ri.Cvar_VariableString("fs_game");
     
+    if (!Q_stricmp(mod, "")) {
+        mod = "base";
+    }
+
     format = mme_pipeCommand->string;
     if (!format || !format[0]) {
-        format = "ffmpeg -r %f -f rawvideo -pix_fmt rgb24 -s %wx%h -i - -threads 0 -preset fast -y -pix_fmt yuv420p -crf 17 -vf vflip %o.mp4 2> ffmpeglog.txt";
+        format = "ffmpeg -r %f -f rawvideo -pix_fmt rgb24 -s %wx%h -i - -threads 0 -preset fast -y -pix_fmt yuv444p -crf 17 -vf vflip %o.mp4 2> ffmpeglog.txt";
     }
     
     while (*format && outLeft  > 0) {
@@ -37,8 +42,8 @@ static qboolean pipeOpen(mmePipeFile_t *pipeFile, const char *name, mmeShotType_
                     Com_sprintf( outBuf + outIndex, outLeft, "%d", height);
                     outIndex += strlen( outBuf + outIndex );
                     break;
-                case 'o':		//map
-                    Com_sprintf( outBuf + outIndex, outLeft, name);
+                case 'o':		//output
+                    Com_sprintf( outBuf + outIndex, outLeft, "%s/%s", mod, name);
                     outIndex += strlen( outBuf + outIndex );
                     break;
                 case '%':
@@ -65,6 +70,7 @@ static qboolean pipeOpen(mmePipeFile_t *pipeFile, const char *name, mmeShotType_
     pipeFile->f = ri.FS_PipeOpen(outBuf, name, "w");
 #endif
     if (!pipeFile->f) {
+        Com_Printf( "Failed to open %s for pipe output\n", name );
         return qfalse;
     }
     pipeFile->fps = fps;

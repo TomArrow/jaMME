@@ -14,6 +14,8 @@
 
 #define BLURMAX 256
 
+#define PIPE_COMMAND_DEFAULT "ffmpeg -f avi -i - -threads 0 -preset fast -y -pix_fmt yuv444p -crf 17 %o.mp4 2> ffmpeglog.txt"
+
 typedef struct mmePipeFile_s {
     char name[MAX_OSPATH];
     fileHandle_t f;
@@ -33,6 +35,7 @@ typedef struct mmeAviFile_s {
 	int header;
 	int format;
 	qboolean audio;
+    qboolean pipe;
 	mmeShotType_t type;
 } mmeAviFile_t;
 
@@ -65,7 +68,7 @@ typedef struct {
 	mmeBlurControl_t *control;
 } mmeBlurBlock_t;
 
-void R_MME_GetShot( void* output );
+void R_MME_GetShot( void* output, mmeShotType_t type );
 void R_MME_GetStencil( void *output );
 void R_MME_GetDepth( byte *output );
 void R_MME_SaveShot( mmeShot_t *shot, int width, int height, float fps, byte *inBuf, qboolean audio, int aSize, byte *aBuf );
