@@ -1272,6 +1272,7 @@ void demoSeekPreRecord(const char* preRecordTimeString) {
 	char metaDataFileName[MAX_OSPATH];
 	char metaDataBuffer[1024];
 	fileHandle_t metaDataHandle = NULL;
+	int len;
 	int seekTime = 0;
 	qboolean isNegative = qfalse;
 	if (isdigit(preRecordTimeString[0]) || preRecordTimeString[0] == '-') { // we allow negative values here too.
@@ -1301,11 +1302,16 @@ void demoSeekPreRecord(const char* preRecordTimeString) {
 
 		// Find metadata to see if this demo has info about pre-recording
 		Com_sprintf(metaDataFileName, sizeof(metaDataFileName), "mmedemos/%s.meta", mme_demoFileName.string);
-		trap_FS_FOpenFile(metaDataFileName, &metaDataHandle, FS_READ);
+		len = trap_FS_FOpenFile(metaDataFileName, &metaDataHandle, FS_READ);
 		if (metaDataHandle) {
 			Com_Memset(metaDataBuffer, 0, sizeof(metaDataBuffer));
 			trap_FS_Read(metaDataBuffer, sizeof(metaDataBuffer), metaDataHandle);
-			metaDataBuffer[sizeof(metaDataBuffer) - 1] = 0; // Just to be safe.
+			if (len < (sizeof(metaDataBuffer) - 1)) {
+				metaDataBuffer[len] = 0;
+			}
+			else {
+				metaDataBuffer[sizeof(metaDataBuffer) - 1] = 0; 
+			}
 
 			const char* prsoValue = simpleGetJSONValueForKey(metaDataBuffer, "prso", 1); // Pre-recording start offset.
 			if (prsoValue) {
