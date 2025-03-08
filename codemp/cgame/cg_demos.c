@@ -1232,14 +1232,14 @@ const char* simpleGetJSONValueForKey(const char* json, const char* key, int dept
 						int outIndex = 0;
 						while (*jsonFoundMaybe && *jsonFoundMaybe != ' ' && *jsonFoundMaybe != '}' && *jsonFoundMaybe != ',' && outIndex < (sizeof(valueBufferReal[0]) - 1)) {
 							valueBuffer[outIndex++] = *jsonFoundMaybe;
-							*jsonFoundMaybe++;
+							jsonFoundMaybe++;
 						}
 						valueBuffer[outIndex] = '\0';
 						return valueBuffer;
 					}
 					else {
 						// This is a string.
-						*jsonFoundMaybe++;
+						jsonFoundMaybe++;
 						jsonHere = jsonFoundMaybe;
 						thisIsValueString = qtrue;
 						valueStringOutIndex = 0;
